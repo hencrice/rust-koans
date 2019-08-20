@@ -11,7 +11,7 @@ fn array_index() {
 // [i32; 0] = []
 #[test]
 fn array_empty() {
-    let arr: [i32; 0];
+    let arr: [i32; 0] = [];
     assert!(arr.len() == 0);
 }
 
@@ -22,7 +22,7 @@ fn array_empty() {
 #[should_panic]
 fn out_of_index() {
     let arr: [&'static str; 5] = ["rust", "is", "mostly", "for", "nerds"];
-    arr[100];
+    arr[0];
 }
 
 // Elements can be replaced in an array at a certain index.
@@ -60,7 +60,7 @@ fn array_map() {
 #[test]
 fn array_filter() {
     let arr: [u16; 5] = [1, 2, 3, 4, 5];
-    let mut iterator = arr.iter().filter(__);
+    let mut iterator = arr.iter().filter(|&x| x % 2 == 0);
     assert!(iterator.next().unwrap() == &2);
     assert!(iterator.next().unwrap() == &4);
     assert!(iterator.next().is_none());
@@ -70,7 +70,7 @@ fn array_filter() {
 #[test]
 fn array_filter_map() {
     let arr: [u8; 5] = [2, 1, 2, 1, 2];
-    let mut iterator = arr.iter().filter_map(|&x| if x == 1 { Some(__) } else { None });
+    let mut iterator = arr.iter().filter_map(|&x| if x == 1 { Some(3) } else { None });
     assert!(iterator.next() == Some(3));
     assert!(iterator.next() == Some(3));
     assert!(iterator.next().is_none());
@@ -86,8 +86,8 @@ fn complex_array_filter_map() {
         } else {
             None
         });
-    assert!(iterator.next().unwrap() == __);
-    assert!(iterator.next().unwrap() == __);
+    assert!(iterator.next().unwrap() == 2);
+    assert!(iterator.next().unwrap() == 4);
     assert!(iterator.next().is_none());
 }
 
@@ -98,6 +98,7 @@ fn for_loops() {
     let mut y: u64 = 1;
     for x in &arr {
         assert!(*x == y);
+        y += 1;
     }
 }
 
@@ -107,8 +108,9 @@ fn for_loops_two() {
     let words: [&'static str; 3] = ["I", "love", "Rust"];
     let mut sentence: String = String::new();
     for word in words.iter() {
-        __
+        sentence.push_str(word);
+        sentence.push_str(" ");
     }
     println!("{:?}", sentence);
-    assert!(sentence == "I love Rust".to_string());
+    assert!(sentence.trim_end() == "I love Rust");
 }
